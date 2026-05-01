@@ -9,6 +9,7 @@ use App\Service\PokemonService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
+use Slim\Exception\HttpBadRequestException;
 
 class PokemonController
 {
@@ -20,6 +21,21 @@ class PokemonController
     public function get(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $pokemonName = strtolower(trim($args['name']));
+
+        /*
+        check if this is a valid pokemon name and refuse any other string
+        a valid pokemon name contains only:
+        - letters a-z
+        - hyphen
+        */
+      
+        if (!preg_match('/^[a-z\-]+$/', $pokemonName)) {
+            $response->getBody()->write(json_encode(['error' => 'Invalid pokemon name.']));
+            return $response
+                ->withHeader('Content-Type', 'application/json')
+                ->withStatus(400);
+        }
+
 
         try {
             $pokemon = $this->pokemonService->getByName($pokemonName);
