@@ -13,6 +13,7 @@ use App\Client\RedisClientInterface;
 
 class PokemonService
 {
+    /** Cache TTL in seconds (1 hour) */
     private const CACHE_TTL = 3600;
     private const CACHE_PREFIX = 'pokemon:';
 

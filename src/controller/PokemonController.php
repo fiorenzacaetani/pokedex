@@ -22,14 +22,7 @@ class PokemonController
     {
         $pokemonName = strtolower(trim($args['name']));
 
-        /*
-        check if this is a valid pokemon name and refuse any other string
-        a valid pokemon name contains only:
-        - letters a-z
-        - hyphen
-        */
-      
-        if (!preg_match('/^[a-z\-]+$/', $pokemonName)) {
+        if (!$this->validatePokemonName($pokemonName)) {
             $response->getBody()->write(json_encode(['error' => 'Invalid pokemon name.']));
             return $response
                 ->withHeader('Content-Type', 'application/json')
@@ -56,5 +49,23 @@ class PokemonController
                 ->withHeader('Content-Type', 'application/json')
                 ->withStatus(500);
         }
+    }
+
+        /*
+
+        */
+
+    /**
+     * check if this is a valid pokemon name and refuse any other string
+     *  a valid pokemon name contains only:
+     *  - letters a-z
+     *  - hyphen
+     *
+     * @param string $pokemonName
+     * @return void
+     */
+    private function validatePokemonName(string $pokemonName)
+    {
+        return preg_match('/^[a-z\-]+$/', $pokemonName);
     }
 }
