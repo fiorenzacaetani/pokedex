@@ -11,8 +11,10 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Http\Message\RequestInterface;
 use Psr\Log\LoggerInterface;
+
 
 class FunTranslationsClientTest extends TestCase
 {
@@ -45,7 +47,7 @@ class FunTranslationsClientTest extends TestCase
         ];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('translationProvider')]
+    #[DataProvider('translationProvider')]
     public function test_returns_translated_text(string $method, string $type, string $input, string $expected): void
     {
         $payload = ['contents' => ['translated' => $expected]];
