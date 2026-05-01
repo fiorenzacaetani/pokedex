@@ -15,6 +15,6 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
 
-EXPOSE 5000
+EXPOSE 80
 
-CMD ["php", "-S", "0.0.0.0:5000", "-t", "public"]
+CMD ["php", "-S", "0.0.0.0:80", "-t", "public"]

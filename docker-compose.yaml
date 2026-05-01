@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: docker/php/Dockerfile
     ports:
-      - "5000:5000"
+      - "5002:80"
     volumes:
       - .:/app
     depends_on:
