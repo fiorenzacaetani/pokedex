@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
+use App\Client\FunTranslationsClient;
 use App\Controller\PokemonController;
 use App\Client\PokeApiClient;
 use App\Client\RedisClientInterface;
 use App\Helper\FlavorTextExtractor;
 use App\Service\PokemonService;
+use App\Service\TranslationService;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\ClientInterface;
 use Monolog\Handler\StreamHandler;
@@ -58,6 +60,17 @@ return [
             get(LoggerInterface::class),
             get(RedisClientInterface::class),
         ),
-        PokemonController::class => create(PokemonController::class)
-            ->constructor(get(PokemonService::class), get(LoggerInterface::class)),
+
+    PokemonController::class => create(PokemonController::class)
+        ->constructor(get(PokemonService::class), get(LoggerInterface::class)),
+
+    FunTranslationsClient::class => create(FunTranslationsClient::class)
+        ->constructor(get(ClientInterface::class),get(LoggerInterface::class)),
+        
+    TranslationService::class => create(TranslationService::class)
+        ->constructor(
+            get(FunTranslationsClient::class),
+            get(RedisClientInterface::class),
+            get(LoggerInterface::class)
+        )
 ];
