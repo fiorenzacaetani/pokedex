@@ -166,3 +166,4 @@ return 400 immediately without calling any external API.
 - **OpenAPI/Swagger documentation** — Slim integrates well with swagger-php
 - **Container hardening** — non-root user in Dockerfile, read-only filesystem,
   resource limits in docker-compose
+- **Error messages** - Define error as constants and manage them through a localisation/translation system.

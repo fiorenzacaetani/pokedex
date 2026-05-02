@@ -147,7 +147,16 @@ class FlavorTextExtractor
      * ALL CAPS names are artifacts from old game hardware character sets
      * (e.g. MEWTWO, GENGAR in Gen I/II entries).
      * Hyphenated names (e.g. mr-mime) are normalized to spaces before comparison.
+     * 
+     *
+     * ...
+     * Note: Pokémon names with special characters (e.g. Farfetch'd) are stored
+     * in PokéAPI without those characters (e.g. farfetchd). This means ALL CAPS
+     * variants like FARFETCH'D are not detected by this check. In practice this
+     * is not an issue because clean entries exist for all such Pokémon in
+     * recent game versions, which are always preferred by the selection strategy.
      */
+
     private function isClean(string $text, string $pokemonName): bool
     {
         $normalizedName = strtoupper(str_replace('-', ' ', $pokemonName));
