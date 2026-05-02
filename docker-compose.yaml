@@ -9,11 +9,20 @@ services:
       - .:/app
     depends_on:
       - redis
+      - redis-test
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
+      REDIS_TEST_HOST: redis-test
+      REDIS_TEST_PORT: 6380
 
   redis:
     image: redis:7-alpine
     ports:
       - "6379:6379"
+  
+  redis-test:
+    image: redis:7-alpine
+    ports:
+      - "6380:6380"
+    command: redis-server --port 6380
