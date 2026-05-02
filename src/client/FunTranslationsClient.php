@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 
 class FunTranslationsClient
 {
-    private const BASE_URL = 'https://funtranslations.mercxry.me/translate/';
+    private const BASE_URL = 'https://api.funtranslations.mercxry.me/v1/translate/';
 
     public function __construct(
         private readonly ClientInterface $httpClient,
@@ -32,8 +32,8 @@ class FunTranslationsClient
     private function translate(string $type, string $text): string
     {
         try {
-            $response = $this->httpClient->request('POST', self::BASE_URL . $type . '.json', [
-                'form_params' => ['text' => $text],
+            $response = $this->httpClient->request('POST', self::BASE_URL . $type, [
+                'json' => ['text' => $text],
             ]);
 
             $data = json_decode($response->getBody()->getContents(), true);

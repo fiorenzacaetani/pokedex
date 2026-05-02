@@ -55,7 +55,7 @@ class FunTranslationsClientTest extends TestCase
         $this->httpClient
             ->expects($this->once())
             ->method('request')
-            ->with('POST', "https://funtranslations.mercxry.me/translate/{$type}.json")
+            ->with('POST', "https://api.funtranslations.mercxry.me/v1/translate/{$type}")
             ->willReturn(new Response(200, [], json_encode($payload)));
 
         $result = $this->client->$method($input);
