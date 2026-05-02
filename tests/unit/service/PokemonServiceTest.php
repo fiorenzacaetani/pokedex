@@ -15,6 +15,9 @@ use App\Client\RedisClientInterface;
 use Psr\Log\LoggerInterface;
 
 
+/**
+ * Unit tests for PokemonService.
+ */
 class PokemonServiceTest extends TestCase
 {
     private PokeApiClient&MockObject $pokeApiClient;
@@ -23,6 +26,9 @@ class PokemonServiceTest extends TestCase
     private RedisClientInterface&MockObject $redis;
     private PokemonService $service;
 
+    /**
+     * Initialises mocks and constructs the service under test.
+     */
     protected function setUp(): void
     {
         $this->pokeApiClient       = $this->createMock(PokeApiClient::class);
@@ -37,6 +43,7 @@ class PokemonServiceTest extends TestCase
         );
     }
 
+    /** Verifies that a cache hit returns the hydrated Pokemon without calling the API. */
     public function test_returns_pokemon_from_cache_when_available(): void
     {
         $cached = json_encode([
@@ -61,6 +68,7 @@ class PokemonServiceTest extends TestCase
         $this->assertSame('Cached description.', $result->description);
     }
 
+    /** Verifies that a cache miss triggers an API call and persists the result to the cache. */
     public function test_fetches_from_api_and_saves_to_cache_on_cache_miss(): void
     {
         $this->redis
@@ -93,6 +101,7 @@ class PokemonServiceTest extends TestCase
         $this->assertSame('It was created by a scientist.', $result->description);
     }
 
+    /** Verifies that a Redis read failure falls through to the API and logs a warning. */
     public function test_proceeds_without_cache_and_logs_warning_when_redis_read_fails(): void
     {
         $this->redis
@@ -122,6 +131,7 @@ class PokemonServiceTest extends TestCase
         $this->assertSame('mewtwo', $result->name);
     }
 
+    /** Verifies that a Redis write failure logs a warning but still returns the Pokemon. */
     public function test_logs_warning_when_redis_write_fails(): void
     {
         $this->redis
@@ -154,6 +164,7 @@ class PokemonServiceTest extends TestCase
         $this->assertSame('mewtwo', $result->name);
     }
 
+    /** Verifies that an empty description is used and a warning logged when no flavor text is found. */
     public function test_uses_empty_description_and_logs_warning_when_no_flavor_text_found(): void
     {
         $this->redis->method('get')->willReturn(null);
@@ -180,6 +191,7 @@ class PokemonServiceTest extends TestCase
         $this->assertSame('', $result->description);
     }
 
+    /** Verifies that a null habitat field from the API is mapped correctly to the Pokemon model. */
     public function test_handles_null_habitat(): void
     {
         $this->redis->method('get')->willReturn(null);
@@ -202,6 +214,7 @@ class PokemonServiceTest extends TestCase
         $this->assertNull($result->habitat);
     }
 
+    /** Verifies that PokemonNotFoundException from the API is propagated to the caller. */
     public function test_propagates_pokemon_not_found_exception(): void
     {
         $this->redis->method('get')->willReturn(null);

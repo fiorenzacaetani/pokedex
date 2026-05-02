@@ -11,14 +11,32 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Handles HTTP requests for the /pokemon/translated/{name} endpoint.
+ * Returns Pokémon data with a fun-translated description.
+ */
 class TranslatedPokemonController
 {
+    /**
+     * @param PokemonService     $pokemonService
+     * @param TranslationService $translationService
+     * @param LoggerInterface    $logger
+     */
     public function __construct(
         private readonly PokemonService $pokemonService,
         private readonly TranslationService $translationService,
         private readonly LoggerInterface $logger,
     ) {}
 
+    /**
+     * Returns Pokémon data with a fun-translated description for the given name.
+     * Responds with 400 for invalid names, 404 if not found, and 500 on unexpected errors.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface      $response
+     * @param array                  $args     Route arguments; expects 'name'
+     * @return ResponseInterface
+     */
     public function get(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $pokemonName = strtolower(trim($args['name']));
@@ -56,8 +74,15 @@ class TranslatedPokemonController
         }
     }
 
-    private function validatePokemonName(string $name): bool
+    /**
+     * Returns a truthy value if the name contains only lowercase letters and hyphens, falsy otherwise.
+     * Valid Pokémon names consist exclusively of the characters a–z and the hyphen (e.g. mr-mime).
+     *
+     * @param string $pokemonName
+     * @return bool
+     */
+    private function validatePokemonName(string $pokemonName): bool
     {
-        return preg_match('/^[a-z\-]+$/', $name) === 1;
+        return preg_match('/^[a-z\-]+$/', $pokemonName) === 1;
     }
 }

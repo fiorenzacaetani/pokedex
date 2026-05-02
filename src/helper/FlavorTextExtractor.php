@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace App\Helper;
 
+/**
+ * Extracts the best available English flavor text from PokéAPI species data,
+ * applying a multi-step fallback strategy to avoid hardware-era text artifacts.
+ */
 class FlavorTextExtractor
 {
     /**
-     * Version priority list, from most recent to oldest.
+     * Version priority list, from most recent generation to oldest.
      * We prefer recent versions as they have more natural wording
      * and the Pokémon name in its current form.
      */
@@ -64,7 +68,7 @@ class FlavorTextExtractor
     }
 
     /**
-     * FInd only the english entries in the given entries
+     * Filters the given flavor text entries to English-language entries only.
      *
      * @param array $entries
      * @return array

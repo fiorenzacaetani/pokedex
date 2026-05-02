@@ -11,12 +11,21 @@ use App\Model\Pokemon;
 use Psr\Log\LoggerInterface;
 use App\Client\RedisClientInterface;
 
+/**
+ * Retrieves Pokémon data from the PokéAPI and caches results in Redis.
+ */
 class PokemonService
 {
     /** Cache TTL in seconds (1 hour) */
     private const CACHE_TTL = 3600;
     private const CACHE_PREFIX = 'pokemon:';
 
+    /**
+     * @param PokeApiClient        $pokeApiClient
+     * @param FlavorTextExtractor  $flavorTextExtractor
+     * @param LoggerInterface      $logger
+     * @param RedisClientInterface $redis
+     */
     public function __construct(
         private readonly PokeApiClient $pokeApiClient,
         private readonly FlavorTextExtractor $flavorTextExtractor,
@@ -24,6 +33,14 @@ class PokemonService
         private readonly RedisClientInterface $redis,
     ) {}
 
+    /**
+     * Returns the Pokémon with the given name, using the Redis cache when available.
+     * Falls back to the PokéAPI on a cache miss and persists the result.
+     *
+     * @param string $pokemonName
+     * @return Pokemon
+     * @throws PokemonNotFoundException
+     */
     public function getByName(string $pokemonName): Pokemon
     {
             $cacheKey = self::CACHE_PREFIX . $pokemonName;
@@ -59,6 +76,12 @@ class PokemonService
         return $pokemon;
     }
 
+    /**
+     * Returns a hydrated Pokemon from the Redis cache, or null on miss or error.
+     *
+     * @param string $key
+     * @return Pokemon|null
+     */
     private function getFromCache(string $key): ?Pokemon
     {
         try {
@@ -82,6 +105,13 @@ class PokemonService
         }
     }
 
+    /**
+     * Persists a Pokemon to the Redis cache as JSON.
+     * Logs a warning and silently continues if the write fails.
+     *
+     * @param string  $key
+     * @param Pokemon $pokemon
+     */
     private function saveToCache(string $key, Pokemon $pokemon): void
     {
         try {

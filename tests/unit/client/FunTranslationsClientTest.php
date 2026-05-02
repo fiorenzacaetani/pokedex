@@ -16,12 +16,18 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Log\LoggerInterface;
 
 
+/**
+ * Unit tests for FunTranslationsClient.
+ */
 class FunTranslationsClientTest extends TestCase
 {
     private ClientInterface&MockObject $httpClient;
     private LoggerInterface&MockObject $logger;
     private FunTranslationsClient $client;
 
+    /**
+     * Initialises mocks and constructs the client under test.
+     */
     protected function setUp(): void
     {
         $this->httpClient = $this->createMock(ClientInterface::class);
@@ -29,6 +35,11 @@ class FunTranslationsClientTest extends TestCase
         $this->client     = new FunTranslationsClient($this->httpClient, $this->logger);
     }
 
+    /**
+     * Provides translation method names, API types, input text, and expected output.
+     *
+     * @return array<string, array{method: string, type: string, input: string, expected: string}>
+     */
     public static function translationProvider(): array
     {
         return [
@@ -47,6 +58,12 @@ class FunTranslationsClientTest extends TestCase
         ];
     }
 
+    /**
+     * @param string $method   Client method to call (translateYoda or translateShakespeare)
+     * @param string $type     Expected API path segment
+     * @param string $input    Text to translate
+     * @param string $expected Expected translated text
+     */
     #[DataProvider('translationProvider')]
     public function test_returns_translated_text(string $method, string $type, string $input, string $expected): void
     {
@@ -63,6 +80,7 @@ class FunTranslationsClientTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
+    /** Verifies that a 429 response triggers a warning log and a TranslationUnavailableException. */
     public function test_throws_translation_unavailable_on_rate_limit(): void
     {
         $this->logger->expects($this->once())->method('warning');
@@ -80,6 +98,7 @@ class FunTranslationsClientTest extends TestCase
         $this->client->translateYoda('some text');
     }
 
+    /** Verifies that a non-429 HTTP error logs an error and throws TranslationUnavailableException. */
     public function test_throws_translation_unavailable_on_generic_error(): void
     {
         $this->logger->expects($this->once())->method('error');

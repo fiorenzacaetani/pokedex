@@ -9,15 +9,30 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
 use Psr\Log\LoggerInterface;
 
+/**
+ * HTTP client for the PokéAPI pokemon-species endpoint.
+ */
 class PokeApiClient
 {
     private const BASE_URL = 'https://pokeapi.co/api/v2/pokemon-species/';
 
+    /**
+     * @param ClientInterface $httpClient
+     * @param LoggerInterface $logger
+     */
     public function __construct(
         private readonly ClientInterface $httpClient,
         private readonly LoggerInterface $logger,
     ) {}
 
+    /**
+     * Fetches raw species data for the given Pokémon name from the PokéAPI.
+     *
+     * @param string $pokemonName
+     * @return array
+     * @throws PokemonNotFoundException if the API returns 404
+     * @throws \GuzzleHttp\Exception\ClientException for other HTTP errors
+     */
     public function fetchSpecies(string $pokemonName): array
     {
         try {

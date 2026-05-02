@@ -8,15 +8,26 @@ use App\Helper\FlavorTextExtractor;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Unit tests for FlavorTextExtractor.
+ */
 class FlavorTextExtractorTest extends TestCase
 {
     private FlavorTextExtractor $extractor;
 
+    /**
+     * Instantiates the extractor under test.
+     */
     protected function setUp(): void
     {
         $this->extractor = new FlavorTextExtractor();
     }
 
+    /**
+     * Provides flavor text entry sets with the expected extracted string for each selection scenario.
+     *
+     * @return array<string, array{pokemonName: string, entries: array, expected: string|null}>
+     */
     public static function flavorTextExtractionProvider(): array
     {
         return [
@@ -90,6 +101,11 @@ class FlavorTextExtractorTest extends TestCase
         ];
     }
 
+    /**
+     * @param string      $pokemonName
+     * @param array       $entries
+     * @param string|null $expected
+     */
     #[DataProvider('flavorTextExtractionProvider')]
     public function test_extract(string $pokemonName, array $entries, ?string $expected): void
     {
@@ -98,6 +114,7 @@ class FlavorTextExtractorTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
+    /** Verifies that null is returned when the entries array is empty. */
     public function test_returns_null_when_entries_are_empty(): void
     {
         $result = $this->extractor->extract([], 'mewtwo');

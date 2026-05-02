@@ -14,12 +14,18 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Unit tests for PokeApiClient.
+ */
 class PokeApiClientTest extends TestCase
 {
     private ClientInterface&MockObject $httpClient;
     private LoggerInterface&MockObject $logger;
     private PokeApiClient $client;
 
+    /**
+     * Initialises mocks and constructs the client under test.
+     */
     protected function setUp(): void
     {
         $this->httpClient = $this->createMock(ClientInterface::class);
@@ -27,6 +33,7 @@ class PokeApiClientTest extends TestCase
         $this->client     = new PokeApiClient($this->httpClient, $this->logger);
     }
 
+    /** Verifies that a successful response is decoded and returned as an array. */
     public function test_returns_decoded_species_data_on_success(): void
     {
         $payload = ['name' => 'mewtwo', 'is_legendary' => true];
@@ -42,6 +49,7 @@ class PokeApiClientTest extends TestCase
         $this->assertSame($payload, $result);
     }
 
+    /** Verifies that a 404 response throws PokemonNotFoundException. */
     public function test_throws_pokemon_not_found_on_404(): void
     {
         $this->expectException(PokemonNotFoundException::class);
@@ -58,6 +66,7 @@ class PokeApiClientTest extends TestCase
         $this->client->fetchSpecies('unknownpokemon');
     }
 
+    /** Verifies that non-404 HTTP errors are logged and re-thrown as ClientException. */
     public function test_logs_and_rethrows_on_non_404_error(): void
     {
         $this->logger
