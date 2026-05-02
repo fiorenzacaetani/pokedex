@@ -74,7 +74,7 @@ class PokemonService
                 isLegendary: $decoded['isLegendary'],
             );
         } catch (\Throwable $e) {
-            $this->logger->warning('Redis read failed, proceeding without cache', [
+            $this->logger->warning('Redis read failed in PokemonService, proceeding without cache', [
                 'key'     => $key,
                 'message' => $e->getMessage(),
             ]);
@@ -87,7 +87,7 @@ class PokemonService
         try {
             $this->redis->setex($key, self::CACHE_TTL, json_encode($pokemon->toArray()));
         } catch (\Throwable $e) {
-            $this->logger->warning('Redis write failed, cache not updated', [
+            $this->logger->warning('Redis write failed in PokemonService, cache not updated', [
                 'key'     => $key,
                 'message' => $e->getMessage(),
             ]);
