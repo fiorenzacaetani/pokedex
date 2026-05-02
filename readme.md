@@ -1,7 +1,7 @@
 # Pokédex API
 
 A RESTful Pokémon information API built with PHP 8.2 and Slim 4, developed as a
-software engineering challenge for TrueLayer.
+software engineering challenge.
 
 ## Requirements
 
