@@ -5,18 +5,16 @@ software engineering challenge for TrueLayer.
 
 ## Requirements
 
-- Docker
-- Docker Compose
-
-No other dependencies need to be installed locally — everything runs inside containers.
+- [Docker](https://docs.docker.com/get-docker/) (includes Docker Compose)
+- [PHP 8.2+](https://www.php.net/downloads) and [Composer](https://getcomposer.org/download/) — only required to run the test suite locally
 
 ## Running the application
+
+All you need to run the API is Docker. No PHP installation required.
 
 ```bash
 docker-compose up --build
 ```
-
-The API will be available at `http://localhost:5001`.
 
 ## Endpoints
 
@@ -60,11 +58,18 @@ curl http://localhost:5002/pokemon/translated/mewtwo
 
 ## Running the tests
 
-Tests run against your local PHP installation. Ensure you have PHP 8.2+ and Composer installed, then:
+Unit and Integration tests run against your local PHP installation. Ensure you have PHP 8.2+ and Composer installed, then:
 
 ```bash
 composer install --dev
 ./vendor/bin/phpunit
+```
+
+To run the Redis cache integration tests, the Docker services must be running first:
+
+```bash
+docker-compose up -d
+./vendor/bin/phpunit tests/Integration
 ```
 
 ## Architecture
@@ -80,6 +85,7 @@ composer install --dev
 - **PHPUnit 11** — testing
 
 ### Project structure
+```
 src/
 ├── Application/       # App factory (shared between HTTP entry point and tests)
 ├── Client/            # HTTP clients for external APIs + Redis interface
@@ -91,6 +97,7 @@ src/
 tests/
 ├── Integration/       # Full request/response cycle tests with mocked HTTP
 └── Unit/              # Unit tests for services, clients, and helpers
+```
 
 ### Key design decisions
 
