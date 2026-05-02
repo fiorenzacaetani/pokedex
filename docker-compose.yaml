@@ -7,7 +7,7 @@ services:
       - "5002:80"
     volumes:
       - .:/app
-      - /app/vendor
+      - /app/vendor # Preserve vendor directory created during image build (prevents host mount override)
     depends_on:
       - redis
       - redis-test
