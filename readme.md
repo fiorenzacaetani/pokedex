@@ -156,8 +156,6 @@ return 400 immediately without calling any external API.
   try/catch approach currently used for Redis
 - **Longer cache TTL for translations** — translations are fully deterministic and
   could be cached indefinitely; 1 hour is conservative
-- **Integration tests against a real Redis instance** in CI — currently the integration
-  test suite uses a Redis stub (always cache miss) to keep tests fast and self-contained
 - **OpenAPI/Swagger documentation** — Slim integrates well with swagger-php
 - **Container hardening** — non-root user in Dockerfile, read-only filesystem,
   resource limits in docker-compose
