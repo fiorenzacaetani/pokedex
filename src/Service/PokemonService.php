@@ -43,7 +43,7 @@ class PokemonService
      */
     public function getByName(string $pokemonName): Pokemon
     {
-            $cacheKey = self::CACHE_PREFIX . $pokemonName;
+        $cacheKey = self::CACHE_PREFIX . $pokemonName;
 
         $cached = $this->getFromCache($cacheKey);
         if ($cached !== null) {

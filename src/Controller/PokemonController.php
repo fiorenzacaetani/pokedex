@@ -9,13 +9,13 @@ use App\Service\PokemonService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
-use Slim\Exception\HttpBadRequestException;
 
 /**
  * Handles HTTP requests for the /pokemon/{name} endpoint.
  */
 class PokemonController
 {
+    use ValidatesPokemonNameTrait;
     /**
      * @param PokemonService  $pokemonService
      * @param LoggerInterface $logger
@@ -67,15 +67,4 @@ class PokemonController
         }
     }
 
-    /**
-     * Returns a truthy value if the name contains only lowercase letters and hyphens, falsy otherwise.
-     * Valid Pokémon names consist exclusively of the characters a–z and the hyphen (e.g. mr-mime).
-     *
-     * @param string $pokemonName
-     * @return bool
-     */
-    private function validatePokemonName(string $pokemonName)
-    {
-        return preg_match('/^[a-z\-]+$/', $pokemonName) === 1;
-    }
 }

@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface;
  */
 class TranslatedPokemonController
 {
+    use ValidatesPokemonNameTrait;
     /**
      * @param PokemonService     $pokemonService
      * @param TranslationService $translationService
@@ -74,15 +75,4 @@ class TranslatedPokemonController
         }
     }
 
-    /**
-     * Returns a truthy value if the name contains only lowercase letters and hyphens, falsy otherwise.
-     * Valid Pokémon names consist exclusively of the characters a–z and the hyphen (e.g. mr-mime).
-     *
-     * @param string $pokemonName
-     * @return bool
-     */
-    private function validatePokemonName(string $pokemonName): bool
-    {
-        return preg_match('/^[a-z\-]+$/', $pokemonName) === 1;
-    }
 }

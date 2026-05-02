@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Client\FunTranslationsClient;
 use App\Controller\PokemonController;
+use App\Controller\TranslatedPokemonController;
 use App\Client\PokeApiClient;
 use App\Client\RedisClientInterface;
 use App\Helper\FlavorTextExtractor;
@@ -63,6 +64,9 @@ return [
 
     PokemonController::class => create(PokemonController::class)
         ->constructor(get(PokemonService::class), get(LoggerInterface::class)),
+
+    TranslatedPokemonController::class => create(TranslatedPokemonController::class)
+        ->constructor(get(PokemonService::class), get(TranslationService::class), get(LoggerInterface::class)),
 
     FunTranslationsClient::class => create(FunTranslationsClient::class)
         ->constructor(get(ClientInterface::class),get(LoggerInterface::class)),

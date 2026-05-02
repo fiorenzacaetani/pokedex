@@ -121,4 +121,25 @@ class FlavorTextExtractorTest extends TestCase
 
         $this->assertNull($result);
     }
+
+    /** Verifies that null is returned when entries exist but none are in English. */
+    public function test_returns_null_when_no_english_entries(): void
+    {
+        $entries = [
+            [
+                'flavor_text' => 'Une description en français.',
+                'language'    => ['name' => 'fr'],
+                'version'     => ['name' => 'sword'],
+            ],
+            [
+                'flavor_text' => '日本語の説明。',
+                'language'    => ['name' => 'ja'],
+                'version'     => ['name' => 'sword'],
+            ],
+        ];
+
+        $result = $this->extractor->extract($entries, 'mewtwo');
+
+        $this->assertNull($result);
+    }
 }
