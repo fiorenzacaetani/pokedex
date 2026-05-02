@@ -3,6 +3,8 @@
 A RESTful Pokémon information API built with PHP 8.2 and Slim 4, developed as a
 software engineering challenge.
 
+> **AI Disclosure** — This project was built in pair programming with Claude (Anthropic). Claude wrote the code; I drove the process: I defined the requirements, reviewed every implementation step, discussed design decisions, pushed back on approaches I disagreed with, and redirected the implementation when needed. The architecture, the key design choices, and the final shape of the solution are mine. Working this way both accelerated the work and made it more thorough and precise than I could have achieved alone in the same time.
+
 ## Requirements
 
 - [Docker](https://docs.docker.com/get-docker/) (includes Docker Compose)
